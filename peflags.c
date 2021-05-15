@@ -112,7 +112,7 @@ static const symbolic_flags_t pe_symbolic_flags[] = {
 /*CF(0x0004, reserved_0x0004),*/
 /*CF(0x0008, reserved_0x0008),*/
 /*CF(0x0010, unspec_0x0010),*/
-/*CF(0x0020, unspec_0x0020),*/
+  CF(0x0020, high-entropy-va),
   CF(0x0040, dynamicbase),
   CF(0x0080, forceinteg),
   CF(0x0100, nxcompat),
@@ -181,6 +181,7 @@ sizeof_values_t sizeof_vals[5] = {
 
 static struct option long_options[] = {
   {"dynamicbase",  optional_argument, NULL, 'd'},
+  {"high-entropy-va", optional_argument, NULL, 'e'},
   {"forceinteg",   optional_argument, NULL, 'f'},
   {"nxcompat",     optional_argument, NULL, 'n'},
   {"no-isolation", optional_argument, NULL, 'i'},
@@ -203,7 +204,7 @@ static struct option long_options[] = {
   {NULL, no_argument, NULL, 0}
 };
 static const char *short_options
-	= "d::f::n::i::s::b::W::t::w::l::S::x::X::y::Y::z::T:vhV";
+	= "d::e::f::n::i::s::b::W::t::w::l::S::x::X::y::Y::z::T:vhV";
 
 static void short_usage (FILE *f);
 static void help (FILE *f);
@@ -699,6 +700,11 @@ parse_args (int argc, char *argv[])
 	                         optarg,
 	                         IMAGE_DLLCHARACTERISTICS_DYNAMIC_BASE);
 	  break;
+	case 'e':
+	  handle_pe_flag_option (long_options[option_index].name,
+	                         optarg,
+	                         IMAGE_DLLCHARACTERISTICS_HIGH_ENTROPY_VA);
+	  break;
 	case 'n':
 	  handle_pe_flag_option (long_options[option_index].name,
 	                         optarg,
@@ -1069,6 +1075,9 @@ help (FILE *f)
 "\n"
 "  -d, --dynamicbase  [BOOL]   Image base address may be relocated using\n"
 "                              address space layout randomization (ASLR).\n"
+"  -e,\n"
+"  --high-entropy-va  [BOOL]   Image is compatible with 64-bit address space\n"
+"                              layout randomization (ASLR).\n"
 "  -f, --forceinteg   [BOOL]   Code integrity checks are enforced.\n"
 "  -n, --nxcompat     [BOOL]   Image is compatible with data execution\n"
 "                              prevention (DEP).\n"
